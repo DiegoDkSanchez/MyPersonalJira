@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TaskControl</string>
+    <string name="listof">Lista de</string>
+    <string name="projects">Proyectos</string>
+    <string name="lorem_description">LoremIpsum es un texto para ejemplificar que hay mucho texto en esta zona de el
+        UI
+    </string>
 </resources>

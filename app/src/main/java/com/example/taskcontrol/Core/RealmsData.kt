@@ -29,12 +29,10 @@ class RealmsData {
         println(todos)
     }
 
-    private fun createProject(name: String, description: String) {
-
+    fun createProject(name: String, description: String) {
         realmDB!!.beginTransaction()
         val generateId = System.currentTimeMillis().toInt()
         var project = realmDB!!.createObject(Project::class.java, generateId)
-
         project.name = name
         project.description = description
         realmDB!!.commitTransaction()
