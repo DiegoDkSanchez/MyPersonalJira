@@ -14,5 +14,6 @@ open class Project (
     var active : Boolean? = null,
     var dateInit : Date? = null,
     var dateFinish : Date? = null,
+    var imagePath : String? = null,
     var tasks : RealmList<Task>? = null
 ) : RealmObject()

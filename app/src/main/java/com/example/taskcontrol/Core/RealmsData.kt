@@ -24,9 +24,9 @@ class RealmsData {
         Realm.setDefaultConfiguration(mRealmConfiguration)
     }
 
-    fun setupControls() {
+    fun getAllProjects(): List<Project> {
         var todos = realmDB!!.where(Project::class.java).findAll()
-        println(todos)
+        return todos
     }
 
     fun createProject(name: String, description: String) {

@@ -5,4 +5,14 @@
     <string name="lorem_description">LoremIpsum es un texto para ejemplificar que hay mucho texto en esta zona de el
         UI
     </string>
+    <string name="add_new_project">Nuevo Proyecto</string>
+    <string name="description_new_project">Manten el control de tus proyectos personales y profecionales con un sistema
+        sencillo para manejar las tareas
+    </string>
+    <string name="nuevo_proyecto">Nuevo Proyecto</string>
+    <string name="name_proyect">Nombre del proyecto</string>
+    <string name="description_proyect">Descripcción de el proyecto</string>
+    <string name="optional">Opcional</string>
+    <string name="add_proyect">Agregar proyecto</string>
+    <string name="add_project">Agregar proyecto</string>
 </resources>
