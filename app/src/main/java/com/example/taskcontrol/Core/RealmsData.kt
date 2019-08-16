@@ -12,7 +12,7 @@ class RealmsData {
 
     private var realmDB: Realm? = null
 
-    fun ConfigureRealm() {
+    fun configureRealm() {
 
         val mRealmConfiguration = RealmConfiguration.Builder()
             .name("tasks_control.realm")
@@ -26,6 +26,9 @@ class RealmsData {
 
     fun getAllProjects(): List<Project> {
         var todos = realmDB!!.where(Project::class.java).findAll()
+        if(todos == null){
+            return ArrayList()
+        }
         return todos
     }
 

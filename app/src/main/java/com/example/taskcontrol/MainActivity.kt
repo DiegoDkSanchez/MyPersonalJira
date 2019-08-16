@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
         actionBar?.hide()
         Realm.init(this)
 
+        val realms = RealmsData()
+        realms.configureRealm()
 
         val list = realms.getAllProjects()
 
