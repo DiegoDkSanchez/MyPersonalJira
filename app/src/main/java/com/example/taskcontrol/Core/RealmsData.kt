@@ -3,6 +3,8 @@ package com.example.taskcontrol.Core
 import com.example.taskcontrol.Core.Model.Project
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RealmsData {
 
@@ -32,13 +34,22 @@ class RealmsData {
         return todos
     }
 
-    fun createProject(name: String, description: String) {
+    fun getProject(id : Long): Project?{
+        return realmDB!!.where(Project::class.java).equalTo("id",id).findFirst()
+    }
+
+    fun insertOrUpdateProject(project: Project){
+        if(project.id == 0L ){
+            val generateId = System.currentTimeMillis()
+            project.id = generateId
+            project.dateInit = Calendar.getInstance().time
+            project.active = true
+        }
         realmDB!!.beginTransaction()
-        val generateId = System.currentTimeMillis().toInt()
-        var project = realmDB!!.createObject(Project::class.java, generateId)
-        project.name = name
-        project.description = description
+        realmDB!!.insertOrUpdate(project)
         realmDB!!.commitTransaction()
     }
+
+
 
 }

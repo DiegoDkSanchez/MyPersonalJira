@@ -33,6 +33,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
+            <ImageView
+                    android:id="@+id/imageBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -81,10 +87,54 @@
                     app:layout_constraintStart_toEndOf="@id/marginLeft"
                     app:layout_constraintEnd_toEndOf="@id/marginRight"
                     android:fontFamily="@font/nunito_sans_light"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/whiteBlue"
                     android:textSize="@dimen/_10sdp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"/>
+            <ImageView
+                    android:id="@+id/iconoFechaInicio"
+                    app:srcCompat="@drawable/ic_date_init"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    app:layout_constraintTop_toBottomOf="@id/itemProjectDescription"
+                    app:layout_constraintStart_toEndOf="@id/marginLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:id="@+id/dateInitTextView"
+                    android:text="Fecha de inicio"
+                    app:layout_constraintTop_toBottomOf="@id/itemProjectDescription"
+                    app:layout_constraintStart_toEndOf="@id/iconoFechaInicio"
+                    app:layout_constraintEnd_toEndOf="@id/marginRight"
+                    android:fontFamily="@font/nunito_sans_bold"
+                    android:textSize="@dimen/_10sdp"
+                    android:textColor="@color/white"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+            <TextView
+                    android:id="@+id/stateProject"
+                    android:text="Proyecto Activo"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:textSize="@dimen/_18sdp"
+                    android:fontFamily="@font/nunito_sans_light"
+                    android:textColor="@color/whiteBlue"
+                    app:layout_constraintStart_toEndOf="@id/marginLeft"
+                    app:layout_constraintEnd_toEndOf="@id/marginRight"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+            <ImageView
+                    android:id="@+id/settingButton"
+                    app:layout_constraintEnd_toEndOf="@id/marginRight"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:tint="@color/whiteBlue"
+                    app:srcCompat="@drawable/ic_settings"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

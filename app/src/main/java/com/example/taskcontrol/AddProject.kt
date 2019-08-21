@@ -10,6 +10,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.example.taskcontrol.Core.Model.Project
+import com.example.taskcontrol.Core.RealmsData
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -19,17 +21,33 @@ import kotlinx.android.synthetic.main.activity_add_project.*
 
 class AddProject : AppCompatActivity() {
 
-    var fileUri: Uri? = null
+    private var fileUri: Uri? = null
+    private val realms = RealmsData()
+    private var id : Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_project)
+        realms.configureRealm()
+        val extra = intent
+        id = extra.getLongExtra("id", 0)
 
         cameraBotton.setOnClickListener {
             askCameraPermission()
         }
+        addProyectButton.setOnClickListener {
+            addProject()
+        }
+    }
 
-
+    private fun addProject() {
+        val project = Project(
+            name = projectNameEditText.text.toString(),
+            description = descriptionEditText.text.toString(),
+            imagePath = fileUri.toString()
+        )
+        realms.insertOrUpdateProject(project)
+        this.onBackPressed()
     }
 
     private fun launchCamera() {

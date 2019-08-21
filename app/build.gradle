@@ -21,6 +21,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -45,7 +48,8 @@ dependencies {
 
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
 
-    implementation ("io.coil-kt:coil:0.6.1")
+    implementation("io.coil-kt:coil:0.6.1")
     implementation 'com.karumi:dexter:5.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 
 }

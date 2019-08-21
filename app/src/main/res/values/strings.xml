@@ -15,4 +15,10 @@
     <string name="optional">Opcional</string>
     <string name="add_proyect">Agregar proyecto</string>
     <string name="add_project">Agregar proyecto</string>
+    <string name="date_init">Fecha de inicio:</string>
+    <string name="project_active">Proyecto Activo</string>
+    <string name="project_finish">Proyecto Finalizado</string>
+    <string name="title_activity_tasks">TasksActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>
