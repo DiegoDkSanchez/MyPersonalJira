@@ -19,6 +19,9 @@
     <string name="project_active">Proyecto Activo</string>
     <string name="project_finish">Proyecto Finalizado</string>
     <string name="title_activity_tasks">TasksActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_to_do">Por hacer</string>
+    <string name="tab_doing">Haciendo</string>
+    <string name="tab_done">Hecho</string>
+    <string name="message_task_created">Tarea creada correctamente</string>
+    <string name="name_task">Nombre de la tarea</string>
 </resources>

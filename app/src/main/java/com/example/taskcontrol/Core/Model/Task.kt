@@ -2,6 +2,7 @@ package com.example.taskcontrol.Core.Model
 
 import com.example.taskcontrol.Core.TaskState
 import io.realm.RealmObject
+import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import java.util.*
@@ -15,5 +16,7 @@ open class Task(
     var porcent : Int = 0,
     var state : String? = null,
     var dateInit : Date? = null,
-    var dateFinish : Date? = null
+    var dateExpected : Date? = null,
+    var dateFinish : Date? = null,
+    var idProject : Long? = null
 ) : RealmObject()

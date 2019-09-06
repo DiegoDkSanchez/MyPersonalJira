@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import com.example.taskcontrol.Core.Model.Project
 import com.example.taskcontrol.Core.RealmsData
 import com.karumi.dexter.Dexter
@@ -18,6 +19,7 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_add_project.*
+import java.io.File
 
 class AddProject : AppCompatActivity() {
 
@@ -29,8 +31,14 @@ class AddProject : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_project)
         realms.configureRealm()
-        val extra = intent
-        id = extra.getLongExtra("id", 0)
+        id = intent.getLongExtra("id", 0)
+        if(id!= 0L){
+            val project = realms.getProject(id?: 0)
+            projectNameEditText.setText(project?.name)
+            descriptionEditText.setText(project?.description)
+            pathOfImageTextView.text = project?.imagePath
+            fileUri = project?.imagePath?.toUri()
+        }
 
         cameraBotton.setOnClickListener {
             askCameraPermission()
@@ -46,6 +54,9 @@ class AddProject : AppCompatActivity() {
             description = descriptionEditText.text.toString(),
             imagePath = fileUri.toString()
         )
+        if(id != 0L && id != null){
+            project.id = id!!
+        }
         realms.insertOrUpdateProject(project)
         this.onBackPressed()
     }
@@ -108,10 +119,34 @@ class AddProject : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && resultCode == -1) {
             pathOfImageTextView.text = fileUri.toString()
         }else if(resultCode == Activity.RESULT_OK && resultCode == -1){
-            fileUri = data?.data
+            fileUri = getPickImageResultUri(data)
             pathOfImageTextView.text = fileUri.toString()
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    fun getPickImageResultUri(data: Intent?): Uri? {
+        var uri:Uri? = null
+        var isCamera = true
+        if (data != null) {
+            val action = data.action
+            isCamera = action != null && action == MediaStore.ACTION_IMAGE_CAPTURE
+        }
+        if (isCamera){
+            uri = getCaptureImageOutputUri()
+        }else {
+            uri =  data!!.data
+        }
+        return uri
+    }
+
+    private fun getCaptureImageOutputUri(): Uri? {
+        var outputFileUri: Uri? = null
+        val getImage = externalCacheDir
+        if (getImage != null) {
+            outputFileUri = Uri.fromFile(File(getImage.path, "pickImageResult.jpeg"))
+        }
+        return outputFileUri
     }
 }

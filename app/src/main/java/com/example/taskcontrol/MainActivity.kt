@@ -1,31 +1,34 @@
 package com.example.taskcontrol
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.view.isInvisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.taskcontrol.Control.DynamicAdapter
 import com.example.taskcontrol.Core.Model.Project
-import com.example.taskcontrol.Core.RealmsData
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.proyect_item.view.*
-import java.util.*
 import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.SnapHelper
+import coil.ImageLoader
 import coil.api.load
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.example.taskcontrol.Core.Constantes
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.proyect_item.*
+import kotlinx.android.synthetic.main.task_detail_item.view.*
+import java.io.File
 import kotlin.collections.ArrayList
-import com.example.taskcontrol.AddProject
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 
 
 class MainActivity : AppCompatActivity() {
@@ -45,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             entries = addItemNewProject(list),
             action = fun(viewHolder, view, item, position) {
                 if(item.id.toInt() == 0){
-                    view.iconImageView.setImageResource(R.drawable.ic_add_project)
+                    //view.iconImageView.setImageResource(R.drawable.ic_add_project)
                     view.dateInitTextView.visibility = View.GONE
                     view.iconoFechaInicio.visibility = View.GONE
                     view.settingButton.visibility = View.GONE
@@ -60,7 +63,21 @@ class MainActivity : AppCompatActivity() {
                 }
                 view.dateInitTextView.text = getString(R.string.date_init) + " "+ date
                 if(item.imagePath != "" && item.imagePath != null){
-                    view.imageBackground.load(Uri.parse(item.imagePath))
+//                    val imageLoader = ImageLoader(this){
+//                        bitmapPoolPercentage(0.5)
+//                        availableMemoryPercentage(0.5)
+//                        crossfade(true)
+//                    }
+                    //val imguri = Uri.parse(item.imagePath)
+                    //view.imageBackground.load(File(imguri.path))
+                    //Picasso.get().load(Uri.parse(item.imagePath)).into(view.imageBackground);
+
+                    Glide.with(this)
+                        .asBitmap()
+                        .load(Uri.parse(item.imagePath))
+                        .apply(Constantes.CONFIG_GLIDE)
+                        .into(view.imageBackground)
+                    //view.imageBackground.setImageURI(Uri.parse(item.imagePath))
                 }
                 if(item.active!= null){
                     if(item.active!!){
@@ -85,6 +102,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent, activityOption.toBundle())
                     }else{
                         val intent = Intent (this, TasksActivity::class.java)
+                        intent.putExtra("id", item.id)
                         startActivity(intent)
                     }
                 }
@@ -97,7 +115,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Realm.init(this)
         viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
         actionBar?.hide()
         addObservers()
