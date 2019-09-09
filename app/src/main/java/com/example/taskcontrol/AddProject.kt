@@ -8,6 +8,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
@@ -26,6 +27,7 @@ class AddProject : AppCompatActivity() {
     private var fileUri: Uri? = null
     private val realms = RealmsData()
     private var id : Long? = null
+    private var loadProject : Project? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,33 +35,58 @@ class AddProject : AppCompatActivity() {
         realms.configureRealm()
         id = intent.getLongExtra("id", 0)
         if(id!= 0L){
-            val project = realms.getProject(id?: 0)
-            projectNameEditText.setText(project?.name)
-            descriptionEditText.setText(project?.description)
-            pathOfImageTextView.text = project?.imagePath
-            fileUri = project?.imagePath?.toUri()
+            loadProject = realms.getProject(id?: 0)
+            projectNameEditText.setText(loadProject?.name)
+            descriptionEditText.setText(loadProject?.description)
+            pathOfImageTextView.text = loadProject?.imagePath
+            fileUri = loadProject?.imagePath?.toUri()
+            addProjectButton.text = getString(R.string.save)
+            deleteProjectButton.visibility = View.VISIBLE
         }
 
         cameraBotton.setOnClickListener {
             askCameraPermission()
         }
-        addProyectButton.setOnClickListener {
+        addProjectButton.setOnClickListener {
             addProject()
+        }
+        deleteProjectButton.setOnClickListener{
+            deleteProject()
+        }
+    }
+
+    private fun deleteProject() {
+        if(loadProject != null){
+            realms.deleteProject(loadProject!!)
+            this.onBackPressed()
         }
     }
 
     private fun addProject() {
-        val project = Project(
-            name = projectNameEditText.text.toString(),
-            description = descriptionEditText.text.toString(),
-            imagePath = fileUri.toString()
-        )
-        if(id != 0L && id != null){
-            project.id = id!!
+        if(loadProject != null){
+            var updateProject = Project(
+                id = loadProject!!.id,
+                name = projectNameEditText.text.toString(),
+                description = descriptionEditText.text.toString(),
+                imagePath = fileUri.toString(),
+                dateInit = loadProject!!.dateInit
+            )
+            saveProject(updateProject)
+        }else{
+            var newProject = Project(
+                name = projectNameEditText.text.toString(),
+                description = descriptionEditText.text.toString(),
+                imagePath = fileUri.toString()
+            )
+            saveProject(newProject)
         }
+    }
+
+    private fun saveProject(project: Project){
         realms.insertOrUpdateProject(project)
         this.onBackPressed()
     }
+
 
     private fun launchCamera() {
         val values = ContentValues(1)

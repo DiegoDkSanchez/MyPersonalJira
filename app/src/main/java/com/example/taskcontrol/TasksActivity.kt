@@ -1,5 +1,6 @@
 package com.example.taskcontrol
 
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +11,12 @@ import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.annotation.StyleRes
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.Glide
 import com.example.taskcontrol.Core.Constantes
 import com.example.taskcontrol.Core.Helpers.resource
 import com.example.taskcontrol.Core.Model.Project
@@ -21,6 +26,7 @@ import com.example.taskcontrol.ui.main.SectionsPagerAdapter
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_tasks.*
 import kotlinx.android.synthetic.main.dialog_new_task.*
+import kotlinx.android.synthetic.main.proyect_item.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -43,6 +49,7 @@ class TasksActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tasks)
         viewModel = ViewModelProviders.of(this).get(TaskActivityViewModel::class.java)
         idProject = intent.getLongExtra("id", 0)
+
         addObservers()
         if(idProject != null){
             viewModel.loadTasks(idProject!!)
@@ -53,7 +60,6 @@ class TasksActivity : AppCompatActivity() {
         fab.setOnClickListener { view ->
 
             val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_new_task, null)
-            //AlertDialogBuilder
             val mBuilder = AlertDialog.Builder(this).setView(mDialogView)
             val  mAlertDialog = mBuilder.show()
             mAlertDialog.dialogAddTask.setOnClickListener {
@@ -77,8 +83,15 @@ class TasksActivity : AppCompatActivity() {
         })
         viewModel.project.observe(this, androidx.lifecycle.Observer {
             project = it
-//            projectImageHeader.load(Uri.parse(it.imagePath))
-    //        Picasso.with(this).load("https://i.imgur.com/H981AN7.jpg").into(project)
+            taskToolbar.title = it.name
+            taskToolbar.popupTheme = R.style.ThemeOverlay_AppCompat_Dark_ActionBar
+            setSupportActionBar(taskToolbar)
+            supportActionBar?.setDisplayShowTitleEnabled(true)
+            Glide.with(this)
+                .asBitmap()
+                .load(Uri.parse(it.imagePath))
+                .apply(Constantes.CONFIG_GLIDE)
+                .into(projectImageHeader)
         })
     }
 

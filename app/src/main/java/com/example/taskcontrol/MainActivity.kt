@@ -63,21 +63,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 view.dateInitTextView.text = getString(R.string.date_init) + " "+ date
                 if(item.imagePath != "" && item.imagePath != null){
-//                    val imageLoader = ImageLoader(this){
-//                        bitmapPoolPercentage(0.5)
-//                        availableMemoryPercentage(0.5)
-//                        crossfade(true)
-//                    }
-                    //val imguri = Uri.parse(item.imagePath)
-                    //view.imageBackground.load(File(imguri.path))
-                    //Picasso.get().load(Uri.parse(item.imagePath)).into(view.imageBackground);
 
                     Glide.with(this)
                         .asBitmap()
                         .load(Uri.parse(item.imagePath))
                         .apply(Constantes.CONFIG_GLIDE)
                         .into(view.imageBackground)
-                    //view.imageBackground.setImageURI(Uri.parse(item.imagePath))
                 }
                 if(item.active!= null){
                     if(item.active!!){

@@ -132,7 +132,7 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
     <Button
-            android:id="@+id/addProyectButton"
+            android:id="@+id/addProjectButton"
             android:text="@string/add_project"
             android:textSize="@dimen/_12sdp"
             android:textColor="@color/white"
@@ -143,6 +143,23 @@
             android:layout_margin="@dimen/_15sdp"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/button_blue_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <Button
+            android:visibility="gone"
+            android:id="@+id/deleteProjectButton"
+            android:text="@string/delete_project"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:fontFamily="@font/nunito_sans_light"
+            android:padding="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@id/addProjectButton"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_15sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/button_red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -161,7 +178,7 @@
             android:id="@+id/pathOfImageTextView"
             app:layout_constraintTop_toBottomOf="@id/descriptionCardView"
             app:layout_constraintStart_toEndOf="@id/cameraBotton"
-            app:layout_constraintEnd_toStartOf="@id/addProyectButton"
+            app:layout_constraintEnd_toStartOf="@id/addProjectButton"
             android:layout_margin="@dimen/_15sdp"
             android:paddingTop="@dimen/_5sdp"
             android:textSize="@dimen/_12sdp"

@@ -116,6 +116,13 @@ class RealmsData {
         realmDB!!.commitTransaction()
     }
 
+    fun deleteProject(project: Project){
+        realmDB!!.beginTransaction()
+        val allData = realmDB!!.where(Project::class.java).equalTo("id", project.id).findFirst()
+        allData?.deleteFromRealm()
+        realmDB!!.commitTransaction()
+    }
+
 
 
 }
