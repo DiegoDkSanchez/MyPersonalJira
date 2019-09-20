@@ -60,7 +60,6 @@
             android:id="@+id/recyclerTasks"
             app:layout_constraintTop_toBottomOf="@id/titleTaskTab"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layoutAnimation="@anim/layout_animation"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp">

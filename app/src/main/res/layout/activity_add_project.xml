@@ -46,6 +46,7 @@
                     android:layout_height="wrap_content"/>
             <EditText
                     android:id="@+id/projectNameEditText"
+                    android:inputType="textCapSentences"
                     android:fontFamily="@font/nunito_sans_regular"
                     android:layout_marginLeft="@dimen/_15sdp"
                     android:layout_marginRight="@dimen/_15sdp"

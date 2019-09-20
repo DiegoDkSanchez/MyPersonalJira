@@ -14,8 +14,8 @@ object Constantes {
     val FINISH = "Finish"
 
     val CONFIG_GLIDE = RequestOptions()
-        .placeholder(R.mipmap.icon_task_manager)
-        .priority(Priority.NORMAL)
+        .placeholder(R.drawable.background_without_image)
+        .priority(Priority.HIGH)
         .format(DecodeFormat.PREFER_RGB_565)
         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
         .dontAnimate()

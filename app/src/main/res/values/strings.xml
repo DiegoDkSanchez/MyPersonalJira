@@ -26,4 +26,16 @@
     <string name="name_task">Nombre de la tarea</string>
     <string name="delete_project">Borrar proyecto</string>
     <string name="save">Guardar</string>
+    <string name="delete">Eliminar</string>
+    <string name="you_are_sure_delete_task">¿Esas seguro de que quieres eliminar esta tarea?</string>
+    <string name="add">Agregar</string>
+    <string name="description_dialog_new_task">Convierte todas tus ideas y tareas en acciones</string>
+    <string name="whats_we_do">¿Que tenemos que hacer?</string>
+    <string name="without_date_finish">Sin fecha de finalizacion</string>
+    <string name="date_finish">Fecha de finalización</string>
+    <string name="hours">Horas</string>
+    <string name="hours_to_work">Horas de trabajo</string>
+    <string name="need_put_name">La tarea necesita nombre</string>
+    <string name="without_time_expected">Sin tiempo establecido</string>
+    <string name="time_expected">Tiempo estimado:</string>
 </resources>

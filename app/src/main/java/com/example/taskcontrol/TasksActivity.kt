@@ -1,6 +1,7 @@
 package com.example.taskcontrol
 
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.StyleRes
@@ -55,22 +57,53 @@ class TasksActivity : AppCompatActivity() {
             viewModel.loadTasks(idProject!!)
             viewModel.loadProject(idProject!!)
         }
-
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
+            addTaskDialog(view)
+        }
+    }
 
-            val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_new_task, null)
-            val mBuilder = AlertDialog.Builder(this).setView(mDialogView)
-            val  mAlertDialog = mBuilder.show()
-            mAlertDialog.dialogAddTask.setOnClickListener {
-                viewModel.addTask(idProject!!,mAlertDialog.dialogNametask.text.toString())
-                Snackbar.make(view, resources.getString(R.string.message_task_created), Snackbar.LENGTH_LONG)
+    private fun addTaskDialog(view: View?) {
+        val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_new_task, null)
+        val mBuilder = AlertDialog.Builder(this).setView(mDialogView)
+        val  mAlertDialog = mBuilder.show()
+        mAlertDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        mAlertDialog?.isDateFinish?.setOnCheckedChangeListener { compoundButton, state ->
+            if(compoundButton.isChecked){
+                mAlertDialog.numberSelector.visibility = View.VISIBLE
+            }else{
+                mAlertDialog.numberSelector.visibility = View.GONE
+            }
+        }
+        mAlertDialog.dialogAddTask.setOnClickListener {
+            var hours : Int? = null
+            if(mAlertDialog.isDateFinish.isChecked){
+                hours = mAlertDialog.numberSelector.value
+            }
+            val success = validateTaskToSave(
+                idProject!!,
+                mAlertDialog.dialogNametask.text.toString(),
+                hours
+            )
+            if(success){
+                Snackbar.make(view!!, resources.getString(R.string.message_task_created), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
                 reload()
                 mAlertDialog.dismiss()
+            }else{
+                mAlertDialog.dialogNametask.hint = getString(R.string.need_put_name)
             }
         }
     }
+
+    private fun validateTaskToSave(idProject: Long, name: String, timeExpected : Int?): Boolean {
+        if(name.trim() != ""){
+            viewModel.addTask(idProject, name, timeExpected)
+            return true
+        }
+        return false
+    }
+
 
     fun reload(){
         viewModel.loadTasks(idProject!!)
@@ -84,6 +117,7 @@ class TasksActivity : AppCompatActivity() {
         viewModel.project.observe(this, androidx.lifecycle.Observer {
             project = it
             taskToolbar.title = it.name
+            taskToolbar.title
             taskToolbar.popupTheme = R.style.ThemeOverlay_AppCompat_Dark_ActionBar
             setSupportActionBar(taskToolbar)
             supportActionBar?.setDisplayShowTitleEnabled(true)

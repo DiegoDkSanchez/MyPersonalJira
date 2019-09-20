@@ -73,7 +73,7 @@ class RealmsData {
         if(task.id == 0L){
             val generateId = System.currentTimeMillis()
             task.id = generateId
-            task.dateInit = Calendar.getInstance().time
+            //task.dateInit = Calendar.getInstance().time
         }
         realmDB!!.beginTransaction()
         realmDB!!.insertOrUpdate(task)

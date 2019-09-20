@@ -23,12 +23,13 @@ class TaskActivityViewModel : ViewModel() {
         project.postValue(realms.getProject(idProject))
     }
 
-    fun addTask(idProject: Long, name: String){
+    fun addTask(idProject: Long, name: String, timeExpected : Int?){
         realms.insertOrUpdateTask(
             Task(
                 description = name,
                 state = Constantes.TODO,
-                idProject = idProject!!
+                idProject = idProject,
+                dateExpected = timeExpected
             )
         )
     }

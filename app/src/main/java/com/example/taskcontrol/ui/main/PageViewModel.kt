@@ -41,11 +41,9 @@ class PageViewModel : ViewModel() {
     }
 
     fun updateStateTask(task : Task){
-        realms.configureRealm()
         realms.updateStateTask(task)
     }
     fun degradeStateTask(task: Task){
-        realms.configureRealm()
         realms.degradeStateTask(task)
     }
 }

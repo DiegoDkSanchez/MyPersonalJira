@@ -1,10 +1,16 @@
 package com.example.taskcontrol.ui.main
 
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -12,15 +18,21 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskcontrol.Control.DynamicAdapter
+import com.example.taskcontrol.Core.BaseView
 import com.example.taskcontrol.Core.Constantes
 import com.example.taskcontrol.Core.Helpers.resource
 import com.example.taskcontrol.Core.Model.Task
 import com.example.taskcontrol.R
 import com.example.taskcontrol.TasksActivity
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.dialog_delete_task.view.*
+import kotlinx.android.synthetic.main.dialog_new_task.*
 import kotlinx.android.synthetic.main.fragment_tasks.*
 import kotlinx.android.synthetic.main.fragment_tasks.view.*
 import kotlinx.android.synthetic.main.fragment_tasks.view.titleTaskTab
+import kotlinx.android.synthetic.main.task_detail_item.*
 import kotlinx.android.synthetic.main.task_detail_item.view.*
+import kotlinx.android.synthetic.main.task_detail_item.view.cubeAnimation
 import java.lang.Exception
 import java.util.ArrayList
 
@@ -46,16 +58,9 @@ class PlaceholderFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_tasks, container, false)
         addObservers(root)
-
-//        root.recyclerTasks.
-        //val textView: TextView = root.findViewById(R.id.section_label)
-//        pageViewModel.text.observe(this, Observer<String> {
-//            textView.text = it
-//        })
         if(currentList != null){
             pageViewModel.ordenarCategorias(currentList!!)
         }
-
         return root
     }
 
@@ -70,7 +75,7 @@ class PlaceholderFragment : Fragment() {
             Constantes.DOING -> {
                 pageViewModel.listDoing.observe(this, Observer { list ->
                     titleTaskTab.text = resources.getString(R.string.tab_doing)
-                    drawToDo(root, list)
+                    drawDoing(root, list)
                 })
             }
             Constantes.DONE -> {
@@ -82,7 +87,6 @@ class PlaceholderFragment : Fragment() {
         }
     }
 
-
     private fun drawToDo(root: View?, list : List<Task>) {
         filterList = list
         isFilterList = true
@@ -93,7 +97,85 @@ class PlaceholderFragment : Fragment() {
             action = fun(viewHolder, view, item, position) {
                 try{
                     view.textViewItem.text = item.description
-                    viewHolder.view.setOnClickListener {
+                    val currentShowPosition = position+1
+                    if(currentShowPosition < 10){
+                        view.taskCounter.text = "0$currentShowPosition"
+                    }else{
+                        view.taskCounter.text = currentShowPosition.toString()
+                    }
+                    if(item.dateExpected != null){
+                        view.itemTimeExpected.text =
+                            getString(R.string.time_expected) + " " +
+                            item.dateExpected.toString() + "h"
+                    }
+                    view.setOnTouchListener { view, motionEvent ->
+                        if(motionEvent.action == MotionEvent.ACTION_DOWN){
+                            view.cubeAnimation.speed = 1f
+                            if(!view.cubeAnimation.isAnimating){
+                                view.cubeAnimation.playAnimation()
+                            }
+                            //cuando le pusheas
+                        }else if(motionEvent.action == MotionEvent.ACTION_UP){
+                            view.cubeAnimation.speed = -1f
+                            if(!view.cubeAnimation.isAnimating){
+                                view.cubeAnimation.playAnimation()
+                            }
+                            //view.cubeAnimation.playAnimation()
+                        }else if(motionEvent.action == MotionEvent.ACTION_CANCEL){
+                            view.cubeAnimation.speed = -1f
+                            if(!view.cubeAnimation.isAnimating){
+                                view.cubeAnimation.playAnimation()
+                            }
+                        }
+                        return@setOnTouchListener true
+                    }
+                }catch (e: Exception){
+                    println(e)
+                }
+            })
+        root?.recyclerTasks?.adapter = adapter
+    }
+    private fun drawDoing(root: View?, list : List<Task>) {
+        filterList = list
+        isFilterList = true
+        configRecycler(root)
+        val adapter = DynamicAdapter(
+            layout = R.layout.task_detail_porcent_item,
+            entries = list,
+            action = fun(viewHolder, view, item, position) {
+                try{
+                    view.textViewItem.text = item.description
+                    val currentShowPosition = position+1
+                    if(currentShowPosition < 10){
+                        view.taskCounter.text = "0$currentShowPosition"
+                    }else{
+                        view.taskCounter.text = currentShowPosition.toString()
+                    }
+                    if(item.dateExpected != null){
+                        view.itemTimeExpected.text =
+                            getString(R.string.time_expected) + " " +
+                                    item.dateExpected.toString() + "h"
+                    }
+                    view.setOnTouchListener { view, motionEvent ->
+                        if(motionEvent.action == MotionEvent.ACTION_DOWN){
+                            view.cubeAnimation.speed = 1f
+                            if(!view.cubeAnimation.isAnimating){
+                                view.cubeAnimation.playAnimation()
+                            }
+                            //cuando le pusheas
+                        }else if(motionEvent.action == MotionEvent.ACTION_UP){
+                            view.cubeAnimation.speed = -1f
+                            if(!view.cubeAnimation.isAnimating){
+                                view.cubeAnimation.playAnimation()
+                            }
+                            //view.cubeAnimation.playAnimation()
+                        }else if(motionEvent.action == MotionEvent.ACTION_CANCEL){
+                            view.cubeAnimation.speed = -1f
+                            if(!view.cubeAnimation.isAnimating){
+                                view.cubeAnimation.playAnimation()
+                            }
+                        }
+                        return@setOnTouchListener true
                     }
                 }catch (e: Exception){
                     println(e)
@@ -103,57 +185,84 @@ class PlaceholderFragment : Fragment() {
     }
 
     private fun configRecycler(root: View?) {
-        val itemhelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){
+        val itemhelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT ){
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                return false
+                return true
+            }
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                val background: ColorDrawable
+                val itemView = viewHolder.itemView
+                // Right swipe.
+                if (dX > 0) {
+                    background = ColorDrawable(resources.getColor(R.color.colorAccent))
+                    background.setBounds(0, itemView.getTop(), (itemView.getLeft() + dX).toInt(), itemView.getBottom())
+                }
+                // Left swipe
+                else {
+                    background = ColorDrawable(resources.getColor(R.color.red))
+                    background.setBounds((itemView.right  ) + dX.toInt(), itemView.getTop(), itemView.right, itemView.getBottom())
+                }
+                background.draw(c)
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive
+                )
             }
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 if(direction == ItemTouchHelper.RIGHT){
+                    viewHolder.itemView.cubeAnimation.speed = -1f
+                    //viewHolder.itemView.x
                     if(isFilterList){
                         pageViewModel.updateStateTask(filterList!![viewHolder.adapterPosition])
                         (activity as TasksActivity).reload()
                     }
                 }else if(direction == ItemTouchHelper.LEFT){
+                    viewHolder.itemView.cubeAnimation.speed = -1f
                     if(isFilterList){
-                        pageViewModel.degradeStateTask(filterList!![viewHolder.adapterPosition])
-                        (activity as TasksActivity).reload()
+                        if(currentState == Constantes.TODO){
+                            val mDialogView = LayoutInflater.from(activity?.applicationContext).inflate(R.layout.dialog_delete_task, null)
+                            val mBuilder = activity?.let { AlertDialog.Builder(it).setView(mDialogView) }
+                            val  mAlertDialog = mBuilder?.show()
+                            mAlertDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            mAlertDialog?.setOnDismissListener {
+                                (activity as TasksActivity).reload()
+                            }
+                            mDialogView.deleteTaskButton.setOnClickListener {
+                                pageViewModel.degradeStateTask(filterList!![viewHolder.adapterPosition])
+                                mAlertDialog?.dismiss()
+                            }
+                        }else{
+                            pageViewModel.degradeStateTask(filterList!![viewHolder.adapterPosition])
+                            (activity as TasksActivity).reload()
+                        }
                     }
                 }
             }
         }
         val item = ItemTouchHelper(itemhelper)
         item.attachToRecyclerView(root?.recyclerTasks)
+        val animationController = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation)
+        root?.recyclerTasks?.layoutAnimation = animationController
         root?.recyclerTasks?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         root?.recyclerTasks?.setHasFixedSize(true)
     }
-
-
     companion object {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private const val ARG_SECTION_NUMBER = "section_number"
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
         @JvmStatic
         fun newInstance(list: List<Task>, state: String): PlaceholderFragment {
             var fragment = PlaceholderFragment()
             fragment.currentState = state
             fragment.currentList = list
             return fragment
-//            return PlaceholderFragment().apply {
-//                arguments = Bundle().apply {
-//                    putInt(ARG_SECTION_NUMBER, sectionNumber)
-//                }
-//            }
         }
     }
 }

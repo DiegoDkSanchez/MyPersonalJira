@@ -16,7 +16,7 @@ open class Task(
     var porcent : Int = 0,
     var state : String? = null,
     var dateInit : Date? = null,
-    var dateExpected : Date? = null,
+    var dateExpected : Int? = null,
     var dateFinish : Date? = null,
     var idProject : Long? = null
 ) : RealmObject()
