@@ -4,9 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import com.example.taskcontrol.AddTaskWizard.AddJobsHoursFragment
 import com.example.taskcontrol.R
 import kotlinx.android.synthetic.main.number_selector.view.*
-import java.lang.reflect.Constructor
 
 class SelectorNumber: LinearLayout {
 
@@ -21,11 +21,22 @@ class SelectorNumber: LinearLayout {
             : super(context, attrs, defStyleAttr) {
         val view = LayoutInflater.from(context).inflate(R.layout.number_selector, this, true)
         view.dismiss.setOnClickListener {
-            if(value>0) view.number.text = (value - 1 ).toString()
+            var willSet : String
+            if(value - 1 < 10 ) willSet = "0" + (value - 1 ).toString()
+            else willSet = (value - 1 ).toString()
+            if(value>1){
+                view.number.text = willSet
+                AddJobsHoursFragment.hours = willSet.toInt()
+            }
         }
         view.add.setOnClickListener {
-            view.number.text = (value + 1).toString()
+            var willSet: String
+            if(value + 1 < 10 ) willSet = "0" + (value + 1 ).toString()
+            else willSet = (value + 1 ).toString()
+            view.number.text = willSet
+            AddJobsHoursFragment.hours = willSet.toInt()
         }
     }
+
 
 }

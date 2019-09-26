@@ -9,6 +9,10 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
+    <style name="dialog" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

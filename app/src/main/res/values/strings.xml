@@ -38,4 +38,9 @@
     <string name="need_put_name">La tarea necesita nombre</string>
     <string name="without_time_expected">Sin tiempo establecido</string>
     <string name="time_expected">Tiempo estimado:</string>
+    <string name="nueva">Nueva</string>
+    <string name="tarea">Tarea</string>
+    <string name="hours_of">Horas de</string>
+    <string name="job">Trabajo</string>
+    <string name="do_not_spesify_hours">No espesificar las horas</string>
 </resources>

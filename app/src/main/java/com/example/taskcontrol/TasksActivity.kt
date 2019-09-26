@@ -5,31 +5,26 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
-import androidx.annotation.StyleRes
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
+import com.example.taskcontrol.AddTaskWizard.AddTaskDialogFragment
 import com.example.taskcontrol.Core.Constantes
-import com.example.taskcontrol.Core.Helpers.resource
 import com.example.taskcontrol.Core.Model.Project
 import com.example.taskcontrol.Core.Model.Task
 import com.example.taskcontrol.Core.RealmsData
 import com.example.taskcontrol.ui.main.SectionsPagerAdapter
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_tasks.*
 import kotlinx.android.synthetic.main.dialog_new_task.*
-import kotlinx.android.synthetic.main.proyect_item.view.*
-import java.util.*
+import kotlinx.android.synthetic.main.dialog_new_task.dialogAddTask
+import kotlinx.android.synthetic.main.dialog_wizard_new_task.*
 import kotlin.collections.ArrayList
 
 class TasksActivity : AppCompatActivity() {
@@ -59,50 +54,54 @@ class TasksActivity : AppCompatActivity() {
         }
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
-            addTaskDialog(view)
+            //addTaskDialog(view)
+            showWizzardAddTask(view)
         }
     }
 
-    private fun addTaskDialog(view: View?) {
-        val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_new_task, null)
-        val mBuilder = AlertDialog.Builder(this).setView(mDialogView)
-        val  mAlertDialog = mBuilder.show()
-        mAlertDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        mAlertDialog?.isDateFinish?.setOnCheckedChangeListener { compoundButton, state ->
-            if(compoundButton.isChecked){
-                mAlertDialog.numberSelector.visibility = View.VISIBLE
-            }else{
-                mAlertDialog.numberSelector.visibility = View.GONE
-            }
-        }
-        mAlertDialog.dialogAddTask.setOnClickListener {
-            var hours : Int? = null
-            if(mAlertDialog.isDateFinish.isChecked){
-                hours = mAlertDialog.numberSelector.value
-            }
-            val success = validateTaskToSave(
-                idProject!!,
-                mAlertDialog.dialogNametask.text.toString(),
-                hours
-            )
-            if(success){
-                Snackbar.make(view!!, resources.getString(R.string.message_task_created), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-                reload()
-                mAlertDialog.dismiss()
-            }else{
-                mAlertDialog.dialogNametask.hint = getString(R.string.need_put_name)
-            }
+    private fun showWizzardAddTask(view: View?) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        if(idProject != null){
+            val dialogFragment = AddTaskDialogFragment(idProject!!)
+            dialogFragment.show(fragmentTransaction,"dialog")
         }
     }
+//
+//
+//    private fun addTaskDialog(view: View?) {
+//        val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_new_task, null)
+//        val mBuilder = AlertDialog.Builder(this).setView(mDialogView)
+//        val  mAlertDialog = mBuilder.show()
+//        mAlertDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        mAlertDialog?.isDateFinish?.setOnCheckedChangeListener { compoundButton, state ->
+//            if(compoundButton.isChecked){
+//                mAlertDialog.numberSelector.visibility = View.VISIBLE
+//            }else{
+//                mAlertDialog.numberSelector.visibility = View.GONE
+//            }
+//        }
+//        mAlertDialog.dialogAddTask.setOnClickListener {
+//            var hours : Int? = null
+//            if(mAlertDialog.isDateFinish.isChecked){
+//                hours = mAlertDialog.numberSelector.value
+//            }
+//            val success = validateTaskToSave(
+//                idProject!!,
+//                mAlertDialog.dialogNametask.text.toString(),
+//                hours
+//            )
+//            if(success){
+//                Snackbar.make(view!!, resources.getString(R.string.message_task_created), Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show()
+//                reload()
+//                mAlertDialog.dismiss()
+//            }else{
+//                mAlertDialog.dialogNametask.hint = getString(R.string.need_put_name)
+//            }
+//        }
+//    }
 
-    private fun validateTaskToSave(idProject: Long, name: String, timeExpected : Int?): Boolean {
-        if(name.trim() != ""){
-            viewModel.addTask(idProject, name, timeExpected)
-            return true
-        }
-        return false
-    }
+
 
 
     fun reload(){

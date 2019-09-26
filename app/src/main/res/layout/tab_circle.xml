@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:padding="@dimen/_15sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <ImageView
+            android:id="@+id/positionOne"
+            android:background="@drawable/tab_indicator_selected"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"/>
+    <ImageView
+            android:id="@+id/positionTwo"
+            android:background="@drawable/tab_indicator_default"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"/>
+</LinearLayout>
