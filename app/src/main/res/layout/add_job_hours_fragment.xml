@@ -28,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     <com.example.taskcontrol.Control.SelectorNumber
+            android:id="@+id/hoursSelector"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/_70sdp"

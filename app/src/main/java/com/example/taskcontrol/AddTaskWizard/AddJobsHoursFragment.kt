@@ -29,10 +29,10 @@ class AddJobsHoursFragment: Fragment() {
         super.onActivityCreated(savedInstanceState)
         checkboxNotHours.setOnCheckedChangeListener { compoundButton, check ->
             if(check) {
-                numberSelector.visibility = View.GONE
+                hoursSelector.visibility = View.GONE
                 addHours = false
             }else{
-                numberSelector.visibility = View.VISIBLE
+                hoursSelector.visibility = View.VISIBLE
                 addHours = true
             }
         }

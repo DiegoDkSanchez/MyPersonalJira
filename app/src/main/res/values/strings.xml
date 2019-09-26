@@ -43,4 +43,8 @@
     <string name="hours_of">Horas de</string>
     <string name="job">Trabajo</string>
     <string name="do_not_spesify_hours">No espesificar las horas</string>
+    <string name="edit">Editar</string>
+    <string name="make_comment">Deja un comentario</string>
+    <string name="comment_of_task">Comentario de la tarea</string>
+    <string name="ok">Ok</string>
 </resources>

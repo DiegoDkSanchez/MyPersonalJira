@@ -44,6 +44,7 @@ class AddTaskDialogFragment(idProject: Long) : DialogFragment() {
 
     private fun configBackgroundAnimation() {
         backgroundCube.setMinAndMaxProgress(0.0f,0.5f)
+        var finishFirstAnimation = false
         backgroundCube.playAnimation()
         viewPagerDialog.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {
@@ -55,6 +56,7 @@ class AddTaskDialogFragment(idProject: Long) : DialogFragment() {
             ) {
                 if(currentPosition == 0){
                     if( backgroundCube.progress >= 0.49f) {
+                        finishFirstAnimation = true
                         backgroundCube.setMinAndMaxProgress(0.5f, 1.0f)
                         backgroundCube.progress = 0.5f + (positionOffset/2)
                         backgroundCube.resumeAnimation()
@@ -67,7 +69,7 @@ class AddTaskDialogFragment(idProject: Long) : DialogFragment() {
                     backgroundCube.pauseAnimation()
                     println("estas aqui prro")
                 }
-                if( position == 1 ){
+                if( position == 1 && finishFirstAnimation ){
                     currentPosition = 1
                     backgroundCube.progress = 1 - (positionOffset/2)
                     backgroundCube.resumeAnimation()

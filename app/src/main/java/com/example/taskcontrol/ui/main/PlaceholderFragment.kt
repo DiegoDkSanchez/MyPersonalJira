@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -17,24 +18,26 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.taskcontrol.AddTaskWizard.AddTaskDialogFragment
 import com.example.taskcontrol.Control.DynamicAdapter
 import com.example.taskcontrol.Core.BaseView
 import com.example.taskcontrol.Core.Constantes
-import com.example.taskcontrol.Core.Helpers.resource
 import com.example.taskcontrol.Core.Model.Task
 import com.example.taskcontrol.R
 import com.example.taskcontrol.TasksActivity
-import com.google.android.material.snackbar.Snackbar
+import com.example.taskcontrol.dialogFragments.UpdateTaskDialogFragment
 import kotlinx.android.synthetic.main.dialog_delete_task.view.*
-import kotlinx.android.synthetic.main.dialog_new_task.*
 import kotlinx.android.synthetic.main.fragment_tasks.*
 import kotlinx.android.synthetic.main.fragment_tasks.view.*
-import kotlinx.android.synthetic.main.fragment_tasks.view.titleTaskTab
-import kotlinx.android.synthetic.main.task_detail_item.*
 import kotlinx.android.synthetic.main.task_detail_item.view.*
 import kotlinx.android.synthetic.main.task_detail_item.view.cubeAnimation
+import kotlinx.android.synthetic.main.task_detail_item.view.itemTimeExpected
+import kotlinx.android.synthetic.main.task_detail_porcent_item.view.*
+import kotlinx.android.synthetic.main.update_task_dialog.view.*
 import java.lang.Exception
+import java.text.SimpleDateFormat
 import java.util.ArrayList
+import java.util.zip.Inflater
 
 /**
  * A placeholder fragment containing a simple view.
@@ -142,37 +145,58 @@ class PlaceholderFragment : Fragment() {
         val adapter = DynamicAdapter(
             layout = R.layout.task_detail_porcent_item,
             entries = list,
-            action = fun(viewHolder, view, item, position) {
+            action = fun(viewHolder, viewDoing, item, position) {
                 try{
-                    view.textViewItem.text = item.description
-                    val currentShowPosition = position+1
-                    if(currentShowPosition < 10){
-                        view.taskCounter.text = "0$currentShowPosition"
-                    }else{
-                        view.taskCounter.text = currentShowPosition.toString()
+                    viewDoing.titleTaskItem.text = item.description
+                    if(item.commentary!= null && item.commentary.toString().trim() != ""){
+                        viewDoing.comentary.text = item.commentary
                     }
                     if(item.dateExpected != null){
-                        view.itemTimeExpected.text =
-                            getString(R.string.time_expected) + " " +
-                                    item.dateExpected.toString() + "h"
+                        viewDoing.timeExpectedItem.text = getString(R.string.time_expected) + " " + item.dateExpected.toString() + "h"
                     }
-                    view.setOnTouchListener { view, motionEvent ->
+                    val formatDate = SimpleDateFormat("dd/M/yyyy")
+                    //viewDoing.dateInitItem.text = getString(R.string.date_init) + " " + formatDate.format(item.dateInit)
+                    viewDoing.cubeAnimationPorcentItem.setMinAndMaxProgress(0.0f, 0.5f)
+                    viewDoing.editButton.setOnClickListener {
+                        val fragmentTransaction = childFragmentManager.beginTransaction()
+                        val dialogFragment = UpdateTaskDialogFragment(item)
+                        dialogFragment.show(fragmentTransaction,"dialog")
+                        /*
+                        val dialogView = LayoutInflater.from(activity?.applicationContext).inflate(R.layout.update_task_dialog, null)
+                        dialogView.drawPorcent.progress = item.porcent
+                        dialogView.textPorcent.text = item.porcent.toString()+"%"
+                        dialogView.seekbarPercent.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                            override fun onProgressChanged(p0: SeekBar?, porcent: Int, p2: Boolean) {
+                                dialogView.drawPorcent.progress = porcent
+                                dialogView.textPorcent.text = porcent.toString()+"%"
+                            }
+                            override fun onStartTrackingTouch(p0: SeekBar?) {}
+                            override fun onStopTrackingTouch(p0: SeekBar?) {}
+                        })
+
+                        val builder = activity?.let { AlertDialog.Builder(it).setView(dialogView) }
+                        val  mAlertDialog = builder?.show()
+                        mAlertDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                         */
+                    }
+                    viewDoing.setOnTouchListener { view, motionEvent ->
                         if(motionEvent.action == MotionEvent.ACTION_DOWN){
-                            view.cubeAnimation.speed = 1f
-                            if(!view.cubeAnimation.isAnimating){
-                                view.cubeAnimation.playAnimation()
+                            view.cubeAnimationPorcentItem.speed = 1f
+                            if(!view.cubeAnimationPorcentItem.isAnimating){
+                                view.cubeAnimationPorcentItem.playAnimation()
                             }
                             //cuando le pusheas
                         }else if(motionEvent.action == MotionEvent.ACTION_UP){
-                            view.cubeAnimation.speed = -1f
-                            if(!view.cubeAnimation.isAnimating){
-                                view.cubeAnimation.playAnimation()
+                            view.cubeAnimationPorcentItem.speed = -1f
+                            if(!view.cubeAnimationPorcentItem.isAnimating){
+                                view.cubeAnimationPorcentItem.playAnimation()
                             }
                             //view.cubeAnimation.playAnimation()
                         }else if(motionEvent.action == MotionEvent.ACTION_CANCEL){
-                            view.cubeAnimation.speed = -1f
-                            if(!view.cubeAnimation.isAnimating){
-                                view.cubeAnimation.playAnimation()
+                            view.cubeAnimationPorcentItem.speed = -1f
+                            if(!view.cubeAnimationPorcentItem.isAnimating){
+                                view.cubeAnimationPorcentItem.playAnimation()
                             }
                         }
                         return@setOnTouchListener true
@@ -211,7 +235,11 @@ class PlaceholderFragment : Fragment() {
                 }
                 // Left swipe
                 else {
-                    background = ColorDrawable(resources.getColor(R.color.red))
+                    if(currentState == Constantes.TODO){
+                        background = ColorDrawable(resources.getColor(R.color.red))
+                    }else {
+                        background = ColorDrawable(resources.getColor(R.color.colorPrimaryDark))
+                    }
                     background.setBounds((itemView.right  ) + dX.toInt(), itemView.getTop(), itemView.right, itemView.getBottom())
                 }
                 background.draw(c)
@@ -220,14 +248,12 @@ class PlaceholderFragment : Fragment() {
             }
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 if(direction == ItemTouchHelper.RIGHT){
-                    viewHolder.itemView.cubeAnimation.speed = -1f
                     //viewHolder.itemView.x
                     if(isFilterList){
                         pageViewModel.updateStateTask(filterList!![viewHolder.adapterPosition])
                         (activity as TasksActivity).reload()
                     }
                 }else if(direction == ItemTouchHelper.LEFT){
-                    viewHolder.itemView.cubeAnimation.speed = -1f
                     if(isFilterList){
                         if(currentState == Constantes.TODO){
                             val mDialogView = LayoutInflater.from(activity?.applicationContext).inflate(R.layout.dialog_delete_task, null)
