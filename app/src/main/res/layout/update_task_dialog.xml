@@ -15,7 +15,7 @@
             android:layout_width="@dimen/_200sdp"
             android:layout_height="wrap_content">
         <Button
-                android:id="@+id/addTaskDialogFragment"
+                android:id="@+id/updateTask"
                 android:background="@color/green"
                 android:textColor="@color/white"
                 android:padding="@dimen/_10sdp"
@@ -44,9 +44,9 @@
                     android:layout_marginLeft="@dimen/_15sdp"
                     android:layout_marginRight="@dimen/_15sdp"
                     android:fontFamily="@font/nunito_sans_bold"
-                    android:textSize="@dimen/_24sdp"
+                    android:textSize="@dimen/_18sdp"
                     android:textColor="@color/colorAccent"
-                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             <TextView
@@ -55,16 +55,28 @@
                     android:layout_marginLeft="@dimen/_15sdp"
                     android:layout_marginRight="@dimen/_15sdp"
                     android:fontFamily="@font/nunito_sans_bold"
-                    android:textSize="@dimen/_60sdp"
+                    android:textSize="@dimen/_50sdp"
                     android:textColor="@color/blackBlue"
-                    android:layout_marginTop="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_24sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
-            <LinearLayout
+
+            <ScrollView
                     android:layout_below="@id/textTask"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
+                <EditText
+                        android:id="@+id/titleTaskEditDialog"
+                        android:fontFamily="@font/nunito_sans_bold"
+                        android:layout_marginLeft="@dimen/_30sdp"
+                        android:layout_marginRight="@dimen/_30sdp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
 
                 <RelativeLayout
                         android:layout_width="match_parent"
@@ -111,7 +123,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 <EditText
-                        android:id="@+id/commentTask"
+                        android:id="@+id/commentEditDialog"
                         android:inputType="textImeMultiLine"
                         android:hint="@string/comment_of_task"
                         android:layout_marginLeft="@dimen/_30sdp"
@@ -119,6 +131,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_45sdp"/>
             </LinearLayout>
+            </ScrollView>
+
             <com.airbnb.lottie.LottieAnimationView
                     android:visibility="visible"
                     android:id="@+id/backgroundCube"

@@ -58,24 +58,24 @@ class RealmsData {
 
 
     fun insertOrUpdateProject(project: Project){
+        realmDB!!.beginTransaction()
         if(project.id == 0L ){
             val generateId = System.currentTimeMillis()
             project.id = generateId
             project.dateInit = Calendar.getInstance().time
             project.active = true
         }
-        realmDB!!.beginTransaction()
         realmDB!!.insertOrUpdate(project)
         realmDB!!.commitTransaction()
     }
 
     fun insertOrUpdateTask(task: Task){
+        realmDB!!.beginTransaction()
         if(task.id == 0L){
             val generateId = System.currentTimeMillis()
             task.id = generateId
             //task.dateInit = Calendar.getInstance().time
         }
-        realmDB!!.beginTransaction()
         realmDB!!.insertOrUpdate(task)
         realmDB!!.commitTransaction()
     }
@@ -83,7 +83,12 @@ class RealmsData {
     fun updateStateTask(task : Task){
         realmDB!!.beginTransaction()
         when(task.state){
-            Constantes.TODO -> task.state = Constantes.DOING
+            Constantes.TODO -> {
+                task.state = Constantes.DOING
+                if(task.dateInit == null){
+                    task.dateInit = Calendar.getInstance().time
+                }
+            }
             Constantes.DOING -> task.state = Constantes.DONE
         }
         realmDB!!.insertOrUpdate(task)

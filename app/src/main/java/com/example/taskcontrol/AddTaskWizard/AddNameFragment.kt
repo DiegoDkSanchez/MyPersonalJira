@@ -27,12 +27,16 @@ class AddNameFragment: Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        nameTaskEditText.addTextChangedListener(object:TextWatcher{
+        nameTaskField.addTextChangedListener(object:TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(name: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 nameTask = name.toString()
             }
         })
+    }
+
+    fun withOutName(){
+        nameTaskField?.hint = getString(R.string.without_name)
     }
 }

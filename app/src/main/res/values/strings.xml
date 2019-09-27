@@ -47,4 +47,5 @@
     <string name="make_comment">Deja un comentario</string>
     <string name="comment_of_task">Comentario de la tarea</string>
     <string name="ok">Ok</string>
+    <string name="without_name">Falta el nombre</string>
 </resources>

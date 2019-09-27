@@ -20,6 +20,7 @@ import kotlin.collections.ArrayList
 class TasksActivity : AppCompatActivity() {
     companion object{
         fun newInstance() = TasksActivity()
+        var currentView = 0
     }
     private lateinit var viewModel: TaskActivityViewModel
     private var idProject : Long? = null
@@ -54,6 +55,7 @@ class TasksActivity : AppCompatActivity() {
 
     fun reload(){
         viewModel.loadTasks(idProject!!)
+
     }
 
     private fun addObservers() {
@@ -82,5 +84,6 @@ class TasksActivity : AppCompatActivity() {
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
+        view_pager.currentItem = currentView
     }
 }

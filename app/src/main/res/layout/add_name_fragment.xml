@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <EditText
-                android:id="@+id/nameTaskEditText"
+                android:id="@+id/nameTaskField"
                 android:textSize="@dimen/_14sdp"
                 android:layout_margin="@dimen/_10sdp"
                 android:hint="@string/whats_we_do"

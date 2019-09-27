@@ -29,6 +29,7 @@ import com.example.taskcontrol.dialogFragments.UpdateTaskDialogFragment
 import kotlinx.android.synthetic.main.dialog_delete_task.view.*
 import kotlinx.android.synthetic.main.fragment_tasks.*
 import kotlinx.android.synthetic.main.fragment_tasks.view.*
+import kotlinx.android.synthetic.main.task_detail_done_item.view.*
 import kotlinx.android.synthetic.main.task_detail_item.view.*
 import kotlinx.android.synthetic.main.task_detail_item.view.cubeAnimation
 import kotlinx.android.synthetic.main.task_detail_item.view.itemTimeExpected
@@ -84,7 +85,7 @@ class PlaceholderFragment : Fragment() {
             Constantes.DONE -> {
                 pageViewModel.listDone.observe(this, Observer { list ->
                     titleTaskTab.text = resources.getString(R.string.tab_done)
-                    drawToDo(root, list)
+                    drawDone(root, list)
                 })
             }
         }
@@ -147,6 +148,8 @@ class PlaceholderFragment : Fragment() {
             entries = list,
             action = fun(viewHolder, viewDoing, item, position) {
                 try{
+                    viewDoing.circlePorcentItem.progress = item.porcent
+                    viewDoing.textPorcentItem.text = item.porcent.toString() + "%"
                     viewDoing.titleTaskItem.text = item.description
                     if(item.commentary!= null && item.commentary.toString().trim() != ""){
                         viewDoing.comentary.text = item.commentary
@@ -154,31 +157,13 @@ class PlaceholderFragment : Fragment() {
                     if(item.dateExpected != null){
                         viewDoing.timeExpectedItem.text = getString(R.string.time_expected) + " " + item.dateExpected.toString() + "h"
                     }
-                    val formatDate = SimpleDateFormat("dd/M/yyyy")
-                    //viewDoing.dateInitItem.text = getString(R.string.date_init) + " " + formatDate.format(item.dateInit)
+                    val formatDate = SimpleDateFormat("dd/MMMM/yyyy")
+                    viewDoing.dateInitItem.text = getString(R.string.date_init) + "\n" + formatDate.format(item.dateInit)
                     viewDoing.cubeAnimationPorcentItem.setMinAndMaxProgress(0.0f, 0.5f)
                     viewDoing.editButton.setOnClickListener {
                         val fragmentTransaction = childFragmentManager.beginTransaction()
                         val dialogFragment = UpdateTaskDialogFragment(item)
                         dialogFragment.show(fragmentTransaction,"dialog")
-                        /*
-                        val dialogView = LayoutInflater.from(activity?.applicationContext).inflate(R.layout.update_task_dialog, null)
-                        dialogView.drawPorcent.progress = item.porcent
-                        dialogView.textPorcent.text = item.porcent.toString()+"%"
-                        dialogView.seekbarPercent.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                            override fun onProgressChanged(p0: SeekBar?, porcent: Int, p2: Boolean) {
-                                dialogView.drawPorcent.progress = porcent
-                                dialogView.textPorcent.text = porcent.toString()+"%"
-                            }
-                            override fun onStartTrackingTouch(p0: SeekBar?) {}
-                            override fun onStopTrackingTouch(p0: SeekBar?) {}
-                        })
-
-                        val builder = activity?.let { AlertDialog.Builder(it).setView(dialogView) }
-                        val  mAlertDialog = builder?.show()
-                        mAlertDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-                         */
                     }
                     viewDoing.setOnTouchListener { view, motionEvent ->
                         if(motionEvent.action == MotionEvent.ACTION_DOWN){
@@ -207,7 +192,46 @@ class PlaceholderFragment : Fragment() {
             })
         root?.recyclerTasks?.adapter = adapter
     }
+    private fun drawDone(root: View?, list : List<Task>) {
+        filterList = list
+        isFilterList = true
+        configRecycler(root)
+        val adapter = DynamicAdapter(
+            layout = R.layout.task_detail_done_item,
+            entries = list,
+            action = fun(viewHolder, viewDone, item, position) {
+                try{
+                    viewDone.titleDoneItem.text = item.description
 
+                    val formatDate = SimpleDateFormat("dd/MMMM/yyyy")
+                    viewDone.dateInitItem.text = getString(R.string.date_finish) + "\n" + formatDate.format(item.dateFinish)
+                    viewDone.setOnTouchListener { view, motionEvent ->
+                        if(motionEvent.action == MotionEvent.ACTION_DOWN){
+                            view.cubeAnimation.speed = 1f
+                            if(!view.cubeAnimation.isAnimating){
+                                view.cubeAnimation.playAnimation()
+                            }
+                            //cuando le pusheas
+                        }else if(motionEvent.action == MotionEvent.ACTION_UP){
+                            view.cubeAnimation.speed = -1f
+                            if(!view.cubeAnimation.isAnimating){
+                                view.cubeAnimation.playAnimation()
+                            }
+                            //view.cubeAnimation.playAnimation()
+                        }else if(motionEvent.action == MotionEvent.ACTION_CANCEL){
+                            view.cubeAnimation.speed = -1f
+                            if(!view.cubeAnimation.isAnimating){
+                                view.cubeAnimation.playAnimation()
+                            }
+                        }
+                        return@setOnTouchListener true
+                    }
+                }catch (e: Exception){
+                    println(e)
+                }
+            })
+        root?.recyclerTasks?.adapter = adapter
+    }
     private fun configRecycler(root: View?) {
         val itemhelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT ){
             override fun onMove(
@@ -251,6 +275,10 @@ class PlaceholderFragment : Fragment() {
                     //viewHolder.itemView.x
                     if(isFilterList){
                         pageViewModel.updateStateTask(filterList!![viewHolder.adapterPosition])
+                        when(currentState){
+                            Constantes.TODO -> {}
+                            Constantes.DOING -> {}
+                        }
                         (activity as TasksActivity).reload()
                     }
                 }else if(direction == ItemTouchHelper.LEFT){

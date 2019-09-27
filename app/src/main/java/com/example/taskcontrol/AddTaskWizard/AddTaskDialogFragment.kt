@@ -93,6 +93,8 @@ class AddTaskDialogFragment(idProject: Long) : DialogFragment() {
             viewModel.addTask(idProject, name, timeExpected)
             return true
         }
+        viewPagerDialog.currentItem = 0
+        AddNameFragment().withOutName()
         return false
     }
 

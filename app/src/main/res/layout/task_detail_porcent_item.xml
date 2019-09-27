@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/_120sdp">
+        android:layout_height="@dimen/_145sdp">
 
     <ImageButton
             android:id="@+id/editButton"
@@ -18,10 +18,49 @@
             android:layout_width="@dimen/_30sdp"
             android:background="@drawable/button_blue_black"
             android:layout_height="@dimen/_30sdp"/>
+    <RelativeLayout
+            android:elevation="@dimen/_2sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:outlineProvider="none"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_90sdp">
+        <androidx.cardview.widget.CardView
+                app:cardCornerRadius="@dimen/_360sdp"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_width="@dimen/_90sdp"
+                android:layout_height="@dimen/_90sdp">
+            <ProgressBar
+                    android:id="@+id/circlePorcentItem"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:max="100"
+                    android:progress="60"
+                    android:progressDrawable="@drawable/circular_progress_bar"
+                    android:secondaryProgress="100"
+                    />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+                android:id="@+id/textPorcentItem"
+                android:text="60%"
+                android:fontFamily="@font/nunito_sans_black"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_18sdp"
+                android:elevation="@dimen/_5sdp"
+                android:outlineProvider="none"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    </RelativeLayout>
 
     <androidx.cardview.widget.CardView
             android:id="@+id/cardViewItem"
-            android:layout_margin="@dimen/_3sdp"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:layout_marginLeft="@dimen/_3sdp"
+            android:layout_marginRight="@dimen/_3sdp"
+            android:layout_marginBottom="@dimen/_3sdp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_100sdp">
         <RelativeLayout
@@ -51,26 +90,7 @@
                         android:orientation="vertical">
                 <RelativeLayout
                         android:layout_width="@dimen/_100sdp"
-                        android:layout_height="@dimen/_80sdp">
-                    <ProgressBar
-                            android:id="@+id/circularProgressbar"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:max="100"
-                            android:progress="60"
-                            android:progressDrawable="@drawable/circular_progress_bar"
-                            android:secondaryProgress="100"
-                            />
-                    <TextView
-                            android:text="60%"
-                            android:fontFamily="@font/nunito_sans_black"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="@dimen/_20sdp"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                        android:layout_height="@dimen/_70sdp">
                 </RelativeLayout>
                     <TextView
                             android:id="@+id/dateInitItem"
@@ -102,7 +122,7 @@
                             android:text="@string/without_time_expected"
                             android:paddingLeft="@dimen/_15sdp"
                             android:paddingRight="@dimen/_15sdp"
-                            android:paddingBottom="@dimen/_15sdp"
+                            android:paddingBottom="@dimen/_5sdp"
                             android:textSize="@dimen/_8sdp"
                             android:fontFamily="@font/nunito_sans_light"
                             android:layout_width="wrap_content"
